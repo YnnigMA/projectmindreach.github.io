@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Psychology Academic Learning Portal</title>
+    <title>MS Psychology Professional Masterclass Matrix</title>
     <script src="https://jsdelivr.net"></script>
     <style>
         :root {
@@ -20,7 +20,7 @@
         header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         header p { font-size: 1.1rem; opacity: 0.9; }
         
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; position: relative; }
         .grid-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; }
         @media (max-width: 992px) { .grid-layout { grid-template-columns: 1fr; } }
         
@@ -29,117 +29,118 @@
         .compliance-panel h3 { font-size: 1.1rem; color: #1e293b; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
         .compliance-item { font-size: 0.85rem; margin-bottom: 0.8rem; display: flex; align-items: flex-start; gap: 0.5rem; color: var(--dark); }
         
-        .main-content { display: flex; flex-direction: column; gap: 2rem; }
-        .category-title { font-size: 1.5rem; color: #1e3a8a; font-weight: 700; margin-top: 1rem; padding-bottom: 0.5rem; border-bottom: 3px double #cbd5e1; }
+        .main-content { display: flex; flex-direction: column; gap: 2rem; transition: filter 0.4s ease; }
         
-        .module-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0; position: relative; }
+        /* Master All-In-One Paywall Configuration */
+        .master-paywall-overlay { position: absolute; top: 180px; left: 312px; width: calc(100% - 312px); height: calc(100% - 180px); background: linear-gradient(to bottom, rgba(248, 250, 252, 0.4) 0%, rgba(248, 250, 252, 0.99) 15%, rgba(248, 250, 252, 1) 100%); display: flex; flex-direction: column; align-items: center; padding-top: 4rem; z-index: 100; }
+        @media (max-width: 992px) { .master-paywall-overlay { left: 0; width: 100%; top: 600px; height: calc(100% - 600px); } }
+        
+        .paywall-box { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15), 0 10px 10px -5px rgba(0,0,0,0.04); width: 100%; max-width: 450px; border: 1px solid #e2e8f0; position: sticky; top: 40px; }
+        .paywall-box h4 { font-size: 1.3rem; color: #1e3a8a; margin-bottom: 0.5rem; text-align: center; font-weight: 700; }
+        .paywall-box p { font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--dark); text-align: center; line-height: 1.5; }
+        
+        .form-group { margin-bottom: 0.75rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.25rem; }
+        .form-group input { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; outline: none; }
+        .form-group input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+        
+        /* Educational Content Layout Elements */
+        .category-title { font-size: 1.5rem; color: #1e3a8a; font-weight: 700; margin-top: 1rem; padding-bottom: 0.5rem; border-bottom: 3px double #cbd5e1; }
+        .module-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; }
         .module-header { background: #f1f5f9; padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
         .module-title { color: #1e3a8a; font-size: 1.25rem; font-weight: 600; }
         .module-meta { background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
+        .module-body { padding: 1.5rem; }
         
-        .module-body { padding: 1.5rem; transition: filter 0.3s ease; }
-        .module-card.locked .module-body { filter: blur(6px); pointer-events: none; user-select: none; }
-        
-        .paywall-overlay { position: absolute; top: 58px; left: 0; width: 100%; height: calc(100% - 58px); background: rgba(248, 250, 252, 0.97); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; z-index: 10; overflow-y: auto; }
-        .module-card.unlocked .paywall-overlay { display: none; }
-        .module-card.unlocked .module-body { filter: none; pointer-events: auto; }
-        
-        .paywall-box { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); width: 100%; max-width: 380px; border: 1px solid #e2e8f0; text-align: left; }
-        .paywall-box h4 { font-size: 1.1rem; color: #1e3a8a; margin-bottom: 0.5rem; text-align: center; }
-        .paywall-box p { font-size: 0.85rem; margin-bottom: 1rem; color: var(--dark); text-align: center; line-height: 1.4; }
-        
-        /* Form Field Styles */
-        .form-group { margin-bottom: 0.75rem; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.25rem; }
-        .form-group input { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; outline: none; }
-        .form-group input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+        .syllabus-block { background: #f8fafc; border-left: 4px solid var(--secondary); padding: 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .syllabus-block h5 { font-size: 0.95rem; color: #1e293b; margin-bottom: 0.5rem; font-weight: 700; }
         
         .section-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 700; margin: 1.2rem 0 0.4rem 0; }
         ul { list-style-position: inside; margin-left: 0.25rem; font-size: 0.95rem; }
         li { margin-bottom: 0.4rem; color: var(--dark); }
         
         .resource-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-        @media (max-width: 576px) { .resource-row { grid-template-columns: 1fr; } }
-        
         .action-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; border: none; cursor: pointer; width: 100%; text-align: center; }
         .btn-video { background: #fee2e2; color: #991b1b; }
-        .btn-video:hover { background: #fca5a5; }
         .btn-scholar { background: #e0f2fe; color: #0369a1; }
-        .btn-scholar:hover { background: #bae6fd; }
         
-        .btn-pay { background: #0070ba; color: white; font-size: 0.95rem; padding: 0.8rem; box-shadow: 0 4px 12px rgba(0, 112, 186, 0.25); margin-top: 0.5rem; display: none; }
+        .btn-pay { background: #0070ba; color: white; font-size: 1rem; padding: 0.9rem; box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3); margin-top: 0.75rem; display: none; text-decoration: none; }
         .btn-pay:hover { background: #005ea6; transform: translateY(-1px); }
-        .btn-verify { background: var(--accent); color: white; font-size: 0.9rem; padding: 0.6rem; margin-top: 0.25rem; }
-        .btn-verify:hover { background: #c2410c; }
+        .btn-verify { background: var(--accent); color: white; font-size: 0.95rem; padding: 0.75rem; margin-top: 0.5rem; }
+        
+        /* Dynamic Application State Masks */
+        body.global-locked .main-content-premium { filter: blur(5px); pointer-events: none; user-select: none; }
+        body.global-unlocked .master-paywall-overlay { display: none !important; }
+        body.global-unlocked .main-content-premium { filter: none !important; pointer-events: auto !important; user-select: text !important; }
         
         footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 2rem; font-size: 0.85rem; margin-top: 5rem; border-top: 4px solid var(--secondary); }
     </style>
 </head>
-<body>
+<body class="global-locked">
 
     <header>
         <h1>MS Psychology Academic Learning Matrix</h1>
-        <p>Aligned with CHED Memorandum Order No. 39 s. 2010 Minimum Competency Standards</p>
+        <p>CHED Memorandum Order No. 39 s. 2010 • Full-Program Premium Pass Portal</p>
     </header>
 
-    <div class="container">
+    <div class="container" id="portalContainer">
+        
+        <!-- MASTER ONE-TIME PAYMENT GATE OVERLAY -->
+        <div class="master-paywall-overlay" id="masterPaywall">
+            <div class="paywall-box">
+                <h4>Unlock Complete MS Psychology Curriculum</h4>
+                <p>Gain lifelong access to all comprehensive modules, advanced study materials, statistical software pipelines, and dynamic licensure review tracks for a one-time fee.</p>
+                
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="studentName" placeholder="Juan Dela Cruz" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="studentEmail" placeholder="juan@university.edu.ph" required>
+                </div>
+                <div class="form-group">
+                    <label>Target University / Affiliation</label>
+                    <input type="text" id="studentUni" placeholder="UP Diliman / UST / Ateneo" required>
+                </div>
+
+                <button onclick="validateMasterForm()" id="verifyBtn" class="action-btn btn-verify">
+                    <i data-feather="user-check"></i> Register Student Details
+                </button>
+
+                <!-- Secure Live Shared Single-Payment Endpoint Button Link -->
+                <a href="https://paypal.com" id="paypalBtn" target="_blank" class="action-btn btn-pay">
+                    <i data-feather="shopping-cart"></i> Unlock All Modules • ₱250.00 PHP
+                </a>
+            </div>
+        </div>
+
         <div class="grid-layout">
             
-            <!-- SIDEBAR INFO PANEL -->
+            <!-- SIDEBAR CORE -->
             <div class="sidebar">
                 <div class="compliance-panel">
                     <h3><i data-feather="shield" style="color:var(--accent); width:16px; height:16px; vertical-align:middle;"></i> System Verification</h3>
                     <div class="compliance-item">
                         <i data-feather="check-circle" style="color:var(--success); width:16px; height:16px; flex-shrink:0;"></i>
-                        <span><strong>CHED Compliant:</strong> Core & Major matrices updated dynamically.</span>
+                        <span><strong>CHED Graduate Standards:</strong> Full alignment to CMO 39 series master frameworks.</span>
                     </div>
                     <div class="compliance-item">
-                        <i data-feather="credit-card" style="color:var(--success); width:16px; height:16px; flex-shrink:0;"></i>
-                        <span><strong>Verified Merchant:</strong> Secured transaction routing via PayPal.</span>
+                        <i data-feather="key" style="color:var(--success); width:16px; height:16px; flex-shrink:0;"></i>
+                        <span><strong>1-Time Premium Key:</strong> Single transaction unlocks every core database item instantly.</span>
                     </div>
                 </div>
             </div>
 
-            <!-- MAIN MODULES CONTENT -->
+            <!-- MAIN TEXT ARCHITECTURE -->
             <div class="main-content">
                 
-                <div class="category-title">Part I: Foundational & Core Requirements (9-12 Units)</div>
-
-                <!-- MODULE 1: UNLOCKED PREVIEW -->
-                <div class="module-card unlocked">
+                <!-- UNLOCKED OPEN PREVIEW SECTION -->
+                <div class="category-title">Part I: Free Program Introduction & Open Coursework</div>
+                
+                <div class="module-card">
                     <div class="module-header">
                         <h2 class="module-title">Advanced Research Methods in Psychology</h2>
-                        <span class="module-meta">3 Units / Core</span>
+                        <span class="module-meta">3 Units / Core Course</span>
                     </div>
                     <div class="module-body">
-                        <div class="section-label">Course Focus Alignment</div>
-                        <p>Comprehensive analysis of experimental, quasi-experimental, and qualitative research designs in accordance with regional ethical evaluation parameters.</p>
-                        <div class="section-label">Core Knowledge Blocks</div>
-                        <ul>
-                            <li>Epistemologies of Behavioral Science (Quantitative vs. Qualitative Paradigms)</li>
-                            <li>Phenomenological, Grounded Theory, and Discursive Matrices</li>
-                            <li>Ethical Codes of the Psychological Association of the Philippines (PAP)</li>
-                        </ul>
-                        <div class="resource-row">
-                            <button onclick="fetchMaterial('video', 'Advanced psychological research methods lecture university')" class="action-btn btn-video"><i data-feather="video"></i> Video Lectures</button>
-                            <button onclick="fetchMaterial('scholar', 'psychological research methods advanced textbook filetype:pdf')" class="action-btn btn-scholar"><i data-feather="file-text"></i> Open Textbooks</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MODULE 2: PAYWALL GATED WITH REGISTRATION -->
-                <div class="module-card locked">
-                    <div class="module-header">
-                        <h2 class="module-title">Advanced Statistics in the Behavioral Sciences</h2>
-                        <span class="module-meta">3 Units / Core</span>
-                    </div>
-                    
-                    <!-- Secured Live Paywall Overlay with Student Form -->
-                    <div class="paywall-overlay">
-                        <div class="paywall-box">
-                            <h4>Premium Module Lock</h4>
-                            <p>Complete the registration form to unlock your secure PayPal checkout option.</p>
-                            
-                            <!-- Student Data Capture Fields -->
-                            <div class="form-group">
-                                <label for="studentName">Full Name</label>
